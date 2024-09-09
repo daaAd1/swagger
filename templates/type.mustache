@@ -1,0 +1,20 @@
+{{#tsType}}
+{{! must use different delimiters to avoid ambiguities when delimiters directly follow a literal brace {. }}
+{{=<% %>=}}
+<%#isRef%><%target%><%/isRef%><%!
+%><%#isAtomic%><%&tsType%><%/isAtomic%><%!
+%><%#isObject%>{<%#properties%>
+<%! if its body parameter, then we don't want to generate only readOnly properties (so they don't get send to API)%>
+  <%#isBodyParameter%>
+    <%^readOnly%>
+      <%name%><%#optional%>?<%/optional%>: <%>type%>;
+    <%/readOnly%>
+  <%/isBodyParameter%>
+  <%^isBodyParameter%>
+    <%name%><%#optional%>?<%/optional%>: <%>type%>;
+  <%/isBodyParameter%>
+<%/properties%>
+}<%/isObject%><%!
+%><%#isArray%>Array<<%#elementType%><%>type%><%/elementType%>><%/isArray%>
+<%={{ }}=%>
+{{/tsType}}

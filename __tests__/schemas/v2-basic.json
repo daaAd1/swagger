@@ -1,0 +1,376 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Simple Swagger 2 API",
+    "version": "1.0.0"
+  },
+  "securityDefinitions": {
+    "securityUser": {
+      "type": "oauth2",
+      "authorizationUrl": "https://localhost/auth/authorize",
+      "flow": "implicit",
+      "scopes": {
+        "scope1": "Scope 1 description",
+        "scope2": "Scope 2 description"
+      }
+    }
+  },
+  "paths": {
+    "/path/{path_parameter_1}/segment/{path_parameter_2}/{path_parameter_3}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "path_parameter_1",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "path_parameter_2",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "path_parameter_3",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "name": "queryParam1",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "queryParam2",
+            "in": "query",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "query_param_3",
+            "in": "query",
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "default": "ACTIVE"
+          },
+          {
+            "name": "queryParam4",
+            "in": "query",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "pipes",
+            "default": [
+              1,
+              "Two",
+              "Three",
+              4
+            ]
+          },
+          {
+            "$ref": "#/parameters/QueryParam5"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Just simple get operation",
+            "schema": {
+              "properties": {
+                "items": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "_id": {
+                        "readOnly": true,
+                        "type": "string"
+                      },
+                      "date": {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      "name": {
+                        "readOnly": true,
+                        "type": "string"
+                      },
+                      "ttl": {
+                        "type": "integer"
+                      },
+                      "status_log": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "ips": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "Generic error response",
+            "schema": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "payload": {
+                  "type": "object"
+                },
+                "status": {
+                  "type": "integer"
+                },
+                "userinfo": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "status",
+                "name"
+              ],
+              "type": "object"
+            }
+          }
+        },
+        "operationId": "simpleGetOperation"
+      },
+      "post": {
+        "operationId": "simplePostOperation",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "securityUser": [
+              "scope1"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "_id": {
+                  "readOnly": true,
+                  "type": "string"
+                },
+                "date": {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "name": {
+                  "readOnly": true,
+                  "type": "string"
+                },
+                "ttl": {
+                  "type": "integer"
+                },
+                "ips": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Something created",
+            "schema": {
+              "$ref": "#/definitions/Something"
+            }
+          },
+          "409": {
+            "description": "Something already exists",
+            "schema": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "payload": {
+                  "type": "object"
+                },
+                "status": {
+                  "type": "integer"
+                },
+                "userinfo": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "status",
+                "name"
+              ],
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "Generic error response",
+            "schema": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "payload": {
+                  "type": "object"
+                },
+                "status": {
+                  "type": "integer"
+                },
+                "userinfo": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "status",
+                "name"
+              ],
+              "type": "object"
+            }
+          }
+        }
+      },
+      "x-exegesis-controller": "controllers/ctrl"
+    },
+    "/endpoint-without-ok-response": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "302": {
+            "description": "Just simple get redirect operation",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "operationId": "endpointWithoutOkResponse"
+      },
+      "x-exegesis-controller": "controllers/ctrl2"
+    },
+    "/upload": {
+      "post": {
+        "tags": [
+          "Upload"
+        ],
+        "operationId": "simpleUpload",
+        "security": [
+          {
+            "securityUser": [
+              "scope1"
+            ]
+          }
+        ],
+        "description": "Upload new document",
+        "parameters": [
+          {
+            "name": "upload",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description": "File to be uploaded"
+          }
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "responses": {
+          "200": {
+            "description": "Detail",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "403": {
+            "description": "Conflict",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Something": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "_id": {
+          "readOnly": true,
+          "type": "string"
+        }
+      }
+    }
+  },
+  "parameters": {
+    "QueryParam5": {
+      "name": "queryParam5",
+      "type": "string",
+      "in": "query"
+    }
+  }
+}
